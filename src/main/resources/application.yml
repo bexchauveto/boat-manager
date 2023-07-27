@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    generate-ddl: true
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 5MB
+      max-request-size: 10MB
+minio:
+  url: localhost
+  port: 9000
+  access-key: Pyf8BN7bUgAPO11HhE5l
+  secret-key: dzh6cyWzlmVGJ2bcseKv5GEWQNp61CC36q6XdM88
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+springdoc:
+  swagger-ui:
+    use-root-path: true

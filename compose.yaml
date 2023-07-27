@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432'
+  minio:
+    image: 'bitnami/minio:latest'
+    container_name: 'minio'
+    environment:
+      - 'MINIO_ROOT_USER=minioAdminUser'
+      - 'MINIO_ROOT_PASSWORD=minioAdminPassword'
+      - 'MINIO_ACCESS_KEY=Pyf8BN7bUgAPO11HhE5l'
+      - 'MINIO_SECRET_KEY=dzh6cyWzlmVGJ2bcseKv5GEWQNp61CC36q6XdM88'
+    volumes:
+      - ./data:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
