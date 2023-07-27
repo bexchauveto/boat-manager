@@ -1,12 +1,14 @@
 package com.bexchauvet.boatmanager.service.Impl;
 
 import com.bexchauvet.boatmanager.error.exception.BadLoginUnauthorizedException;
+import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
 import com.bexchauvet.boatmanager.service.UserService;
 import com.bexchauvet.boatmanager.service.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String generateToken(UserDTO user) {
+    public TokenDTO generateToken(UserDTO user) throws UsernameNotFoundException {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         if (passwordEncoder.matches(user.getPassword(), userDetails.getPassword())) {
             Instant now = Instant.now();
@@ -42,7 +44,7 @@ public class UserServiceImpl implements UserService {
                     .subject(userDetails.getUsername())
                     .claim("scope", scope)
                     .build();
-            return "{\"token\":\"" + this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue() + "\"}";
+            return new TokenDTO(this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue());
         } else {
             throw new BadLoginUnauthorizedException();
         }

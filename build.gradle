@@ -5,10 +5,15 @@ plugins {
 }
 
 group = 'com.bex-chauvet'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     sourceCompatibility = '17'
+}
+
+jar {
+    archiveBaseName = 'boat-manager'
+    archiveVersion = '1.0.0'
 }
 
 configurations {
@@ -37,7 +42,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.h2database:h2:2.1.214'
-    testImplementation 'com.playtika.testcontainers:embedded-minio'
+    //testImplementation 'com.playtika.testcontainers:embedded-minio'
 }
 
 tasks.named('test') {

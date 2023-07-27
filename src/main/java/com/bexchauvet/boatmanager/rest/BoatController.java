@@ -2,8 +2,6 @@ package com.bexchauvet.boatmanager.rest;
 
 import com.bexchauvet.boatmanager.domain.Boat;
 import com.bexchauvet.boatmanager.error.dto.ErrorDTO;
-import com.bexchauvet.boatmanager.error.exception.BoatImageNotFoundException;
-import com.bexchauvet.boatmanager.error.exception.BoatNotFoundException;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
 import com.bexchauvet.boatmanager.service.BoatService;
 import com.bexchauvet.boatmanager.service.ImageService;
@@ -45,17 +43,11 @@ public class BoatController {
             @ApiResponse(responseCode = "200", description = "Found all the boats",
                     content = {@Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = Boat.class)))}),
-            @ApiResponse(responseCode = "400", description = "Invalid id supplied",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "401", description = "Invalid authentication token",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ErrorDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Book not found",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDTO.class)))})
     @GetMapping("")
-    public List<Boat> getAll(@ParameterObject Pageable pageable) {
+    public List<Boat> getAll() {
         return this.boatService.getAll();
     }
 
@@ -161,15 +153,11 @@ public class BoatController {
                             schema = @Schema(implementation = ErrorDTO.class)))})
     @PostMapping(value = "/{id}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageDTO> uploadImage(@PathVariable("id") String id,
-                                                  @Parameter(description = "Files to be uploaded", content =
-                                                  @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+                                                  @Parameter(description = "File to be uploaded (max size 5MB)",
+                                                          content = @Content(mediaType =
+                                                                  MediaType.MULTIPART_FORM_DATA_VALUE))
                                                   @RequestPart(value = "file", required = false) MultipartFile file) {
-        if (boatService.exists(id)) {
-            boatService.setImage(id);
-            return new ResponseEntity<>(this.imageService.putImage(id, file), HttpStatusCode.valueOf(201));
-        } else {
-            throw new BoatNotFoundException(id);
-        }
+        return new ResponseEntity<>(this.imageService.putImage(id, file), HttpStatusCode.valueOf(201));
     }
 
     @Operation(summary = "Download an image of a boat in the database")
@@ -186,11 +174,7 @@ public class BoatController {
     @GetMapping(value = "/{id}/images", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public @ResponseBody byte[] downloadImage(@PathVariable("id") String id) throws IOException {
-        if (boatService.hasImage(id)) {
-            return IOUtils.toByteArray(this.imageService.downloadImage(id));
-        } else {
-            throw new BoatImageNotFoundException(id);
-        }
+        return IOUtils.toByteArray(this.imageService.downloadImage(id));
     }
 
 

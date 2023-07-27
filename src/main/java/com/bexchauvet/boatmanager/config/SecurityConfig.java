@@ -38,7 +38,7 @@ public class SecurityConfig {
     RSAPublicKey key;
 
     @Value("${jwt.private.key}")
-    RSAPrivateKey priv;
+    RSAPrivateKey privateKey;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -70,26 +70,20 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService users() {
-        User.UserBuilder users = User.withDefaultPasswordEncoder();
+        User.UserBuilder users = User.builder();
         UserDetails bob = users
                 .username("Bob")
                 .passwordEncoder(password -> encoder().encode(password))
-                .password("password")
-                .roles("USER")
-                .build();
-        UserDetails oscar = users
-                .username("Oscar")
-                .passwordEncoder(password -> encoder().encode(password))
-                .password("password")
+                .password("872Mu58o&F#7Qy398n*3")
                 .roles("USER")
                 .build();
         UserDetails alice = users
                 .username("Alice")
                 .passwordEncoder(password -> encoder().encode(password))
-                .password("password")
+                .password("%TF547o3b9%p5P^3c7m9")
                 .roles("USER", "ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(alice, bob, oscar);
+        return new InMemoryUserDetailsManager(alice, bob);
     }
 
     @Bean
@@ -104,9 +98,9 @@ public class SecurityConfig {
 
     @Bean
     JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(this.key).privateKey(this.priv).build();
-        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwks);
+        JWK jwk = new RSAKey.Builder(this.key).privateKey(this.privateKey).build();
+        JWKSource<SecurityContext> jks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jks);
     }
 
 

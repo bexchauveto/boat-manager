@@ -1,12 +1,21 @@
 spring:
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        show-sql: false
     generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://localhost:56603/mydatabase
+    username: myuser
+    password: secret
   servlet:
     multipart:
       enabled: true
       file-size-threshold: 2KB
       max-file-size: 5MB
-      max-request-size: 10MB
+      max-request-size: 6MB
 minio:
   url: localhost
   port: 9000

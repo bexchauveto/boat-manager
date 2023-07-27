@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 5MB
+      max-request-size: 10MB
+minio:
+  url: localhost
+  port: 9000
+  access-key: accessKey
+  secret-key: secretKey
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+springdoc:
+  swagger-ui:
+    use-root-path: true
