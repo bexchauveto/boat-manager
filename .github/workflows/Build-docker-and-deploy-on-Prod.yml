@@ -31,7 +31,7 @@ jobs:
           push: true
           tags: latest
       - name: Docker Push
-        run: docker push irobire/boat-manager:latest
+        run: docker push irobire/boat-manager
       - name: Restart the docker microservice
         uses: appleboy/ssh-action@v1.0.0
         with:
