@@ -29,9 +29,9 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: latest
+          tags: irobire/boat-manager:latest
       - name: Docker Push
-        run: docker push irobire/boat-manager
+        run: docker push irobire/boat-manager:latest
       - name: Restart the docker microservice
         uses: appleboy/ssh-action@v1.0.0
         with:
