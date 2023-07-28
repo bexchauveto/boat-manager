@@ -186,7 +186,7 @@ public class ImageServiceUnitTest {
     void downloadImage_NOT_FOUND() throws Exception {
         when(boatRepository.findById(Mockito.anyString()))
                 .thenReturn(Optional.empty());
-        assertThrows(BoatNotFoundException.class,
+        assertThrows(BoatImageNotFoundException.class,
                 () -> imageService.downloadImage("id"));
         verify(boatRepository).findById(Mockito.anyString());
         verifyNoInteractions(minioClient);

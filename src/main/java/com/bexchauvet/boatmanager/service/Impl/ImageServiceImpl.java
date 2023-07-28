@@ -65,7 +65,7 @@ public class ImageServiceImpl implements ImageService {
                 throw new RuntimeException(e);
             }
         } else {
-            throw new BoatNotFoundException(id);
+            throw new BoatImageNotFoundException(id);
         }
     }
 

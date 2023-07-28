@@ -2,8 +2,8 @@ package com.bexchauvet.boatmanager.rest;
 
 import com.bexchauvet.boatmanager.error.exception.BadLoginUnauthorizedException;
 import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
+import com.bexchauvet.boatmanager.rest.dto.UserDTO;
 import com.bexchauvet.boatmanager.service.UserService;
-import com.bexchauvet.boatmanager.service.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +57,7 @@ public class AuthControllerUnitTest {
         when(userService.generateToken(Mockito.any(UserDTO.class)))
                 .thenReturn(new TokenDTO("TOKEN"));
         assertEquals(new ResponseEntity<>(new TokenDTO("TOKEN"), HttpStatusCode.valueOf(200)),
-                authController.login(new UserDTO("Username", "badPassword")));
+                authController.login(new UserDTO("Username", "Password")));
         verify(userService).generateToken(Mockito.any(UserDTO.class));
         verifyNoMoreInteractions(userService);
     }

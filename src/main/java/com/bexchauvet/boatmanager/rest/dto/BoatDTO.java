@@ -1,4 +1,4 @@
-package com.bexchauvet.boatmanager.service.dto;
+package com.bexchauvet.boatmanager.rest.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

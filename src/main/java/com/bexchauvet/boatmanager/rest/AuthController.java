@@ -4,7 +4,7 @@ import com.bexchauvet.boatmanager.error.dto.ErrorDTO;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
 import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
 import com.bexchauvet.boatmanager.service.UserService;
-import com.bexchauvet.boatmanager.service.dto.UserDTO;
+import com.bexchauvet.boatmanager.rest.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

@@ -2,8 +2,8 @@ package com.bexchauvet.boatmanager.service.Impl;
 
 import com.bexchauvet.boatmanager.error.exception.BadLoginUnauthorizedException;
 import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
+import com.bexchauvet.boatmanager.rest.dto.UserDTO;
 import com.bexchauvet.boatmanager.service.UserService;
-import com.bexchauvet.boatmanager.service.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

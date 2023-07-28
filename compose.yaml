@@ -1,12 +1,15 @@
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: 'postgres'
     environment:
-      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_DB=boat-manager'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - 56603:5432
+      - '5432:5432'
+    networks:
+      - boat_manager_network
   minio:
     image: 'bitnami/minio:latest'
     container_name: 'minio'
@@ -18,5 +21,25 @@ services:
     volumes:
       - ./data:/data
     ports:
-      - 9000:9000
-      - 9001:9001
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - boat_manager_network
+  app:
+    build: .
+    image: irobire/boat-manager:latest
+    container_name: 'app'
+    environment:
+      USER_1_NAME: $USER_1_NAME
+      USER_1_PASSWORD: $USER_1_PASSWORD
+      USER_2_NAME: $USER_2_NAME
+      USER_2_PASSWORD: $USER_2_PASSWORD
+    ports:
+      - '8080:8080'
+    profiles:
+      - prod
+    networks:
+      - boat_manager_network
+networks:
+  boat_manager_network:
+    driver: bridge

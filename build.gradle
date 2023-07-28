@@ -11,9 +11,19 @@ java {
     sourceCompatibility = '17'
 }
 
+bootJar {
+    archiveBaseName = 'boat-manager'
+    archiveVersion = '1.0.0'
+    enabled = true
+    manifest {
+        attributes 'Start-Class': 'com.bexchauvet.boatmanager.BoatManagerApplication'
+    }
+}
+
 jar {
     archiveBaseName = 'boat-manager'
     archiveVersion = '1.0.0'
+    enabled = true
 }
 
 configurations {

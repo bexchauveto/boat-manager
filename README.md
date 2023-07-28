@@ -20,15 +20,21 @@ The architecture is composed of 3 parts:
 
 ## Start locally
 
-To start locally, first you need to have Java 17 and the Docker Engine.
+To start locally, first you need to have Java 17 and the Docker Engine. Then you need to create a local /data directory.
 
 ```shell
+mkdir data
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
-This command will start the application and 2 containers, one for Postgres and the other one for Minio
+This command will create the local /data directory and start the application and 2 containers, one for Postgres and the
+other one for Minio
 
 ## Deploy in production
+
+When the project is push on main, then a github actions is triggered to start the build of the Docker for Boat
+Manager microservice. Then the docker is pushed to Docker Hub and a trigger will launch the restart of the Docker on
+the production server.
 
 ## Limits and Improvements.
 

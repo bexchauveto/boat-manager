@@ -23,3 +23,9 @@ jwt:
 springdoc:
   swagger-ui:
     use-root-path: true
+user1:
+  name: Bob
+  password: '872Mu58o&F#7Qy398n*3'
+user2:
+  name: Alice
+  password: '%TF547o3b9%p5P^3c7m9'

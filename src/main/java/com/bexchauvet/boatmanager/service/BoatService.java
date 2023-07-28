@@ -1,8 +1,8 @@
 package com.bexchauvet.boatmanager.service;
 
 import com.bexchauvet.boatmanager.domain.Boat;
+import com.bexchauvet.boatmanager.rest.dto.BoatDTO;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
-import com.bexchauvet.boatmanager.service.dto.BoatDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

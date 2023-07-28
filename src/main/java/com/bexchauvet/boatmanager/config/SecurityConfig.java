@@ -40,6 +40,15 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     RSAPrivateKey privateKey;
 
+    @Value("${user1.name}")
+    String user1Name;
+    @Value("${user1.password}")
+    String user1Password;
+    @Value("${user2.name}")
+    String user2Name;
+    @Value("${user2.password}")
+    String user2Password;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -72,15 +81,15 @@ public class SecurityConfig {
     public UserDetailsService users() {
         User.UserBuilder users = User.builder();
         UserDetails bob = users
-                .username("Bob")
+                .username(user1Name)
                 .passwordEncoder(password -> encoder().encode(password))
-                .password("872Mu58o&F#7Qy398n*3")
+                .password(user1Password)
                 .roles("USER")
                 .build();
         UserDetails alice = users
-                .username("Alice")
+                .username(user2Name)
                 .passwordEncoder(password -> encoder().encode(password))
-                .password("%TF547o3b9%p5P^3c7m9")
+                .password(user2Password)
                 .roles("USER", "ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(alice, bob);

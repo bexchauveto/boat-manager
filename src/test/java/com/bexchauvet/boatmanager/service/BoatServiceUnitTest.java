@@ -5,7 +5,7 @@ import com.bexchauvet.boatmanager.error.exception.BoatNotFoundException;
 import com.bexchauvet.boatmanager.repository.BoatRepository;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
 import com.bexchauvet.boatmanager.service.Impl.BoatServiceImpl;
-import com.bexchauvet.boatmanager.service.dto.BoatDTO;
+import com.bexchauvet.boatmanager.rest.dto.BoatDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,14 +36,17 @@ public class BoatServiceUnitTest {
         boatService = new BoatServiceImpl(boatRepository);
     }
 
+    private Boat createBoat(Long id) {
+        return new Boat(id, "my boat", "my description", false);
+    }
+
 
     @Test
     void getAll() {
         when(boatRepository.findAll()).thenReturn(Collections.emptyList())
-                .thenReturn(List.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(List.of(createBoat(2L)));
         assertTrue(boatService.getAll().isEmpty());
-        List<Boat> expectedResult =
-                List.of(new Boat(1L, "my boat", "my description", false));
+        List<Boat> expectedResult = List.of(createBoat(2L));
         assertEquals(expectedResult, boatService.getAll());
         verify(boatRepository, times(2)).findAll();
         verifyNoMoreInteractions(boatRepository);
@@ -69,8 +72,8 @@ public class BoatServiceUnitTest {
     @Test
     void getById() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
-        Boat expectedResult = new Boat(1L, "my boat", "my description", false);
+                .thenReturn(Optional.of(createBoat(1L)));
+        Boat expectedResult = createBoat(1L);
         Boat result = boatService.getById("1");
         assertEquals(expectedResult, result);
         verify(boatRepository).findById(Mockito.anyString());
@@ -80,10 +83,10 @@ public class BoatServiceUnitTest {
     @Test
     void create() {
         when(boatRepository.save(Mockito.any(Boat.class)))
-                .thenReturn(new Boat(1L, "my boat", "my description", false));
+                .thenReturn(createBoat(1L));
         MessageDTO createResult = boatService.create(new BoatDTO("my boat", "my description"));
         MessageDTO expectedResult = new MessageDTO("Boat information with ID 1 has been created",
-                HttpStatus.CREATED, new Boat(1L, "my boat", "my description", false));
+                HttpStatus.CREATED, createBoat(1L));
         assertEquals(expectedResult.getMessage(), createResult.getMessage());
         assertEquals(expectedResult.getStatus(), createResult.getStatus());
         assertEquals(expectedResult.getData(), createResult.getData());
@@ -104,7 +107,7 @@ public class BoatServiceUnitTest {
     @Test
     void update() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(createBoat(1L)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(
                         new Boat(1L, "my new boat name", "brand new description", false));
@@ -132,7 +135,7 @@ public class BoatServiceUnitTest {
     @Test
     void delete() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(createBoat(1L)));
         doNothing().when(boatRepository).delete(Mockito.any(Boat.class));
         MessageDTO deleteResult = boatService.delete("1");
         MessageDTO expectedResult = new MessageDTO("Boat information with ID 1 has been deleted",
@@ -148,7 +151,7 @@ public class BoatServiceUnitTest {
     @Test
     void exists() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(createBoat(1L)));
         assertTrue(boatService.exists("1"));
         verify(boatRepository).findById(Mockito.anyString());
         verifyNoMoreInteractions(boatRepository);
@@ -175,7 +178,7 @@ public class BoatServiceUnitTest {
     @Test
     void hasImage_false() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(createBoat(1L)));
         assertFalse(boatService.hasImage("1"));
         verify(boatRepository).findById(Mockito.anyString());
         verifyNoMoreInteractions(boatRepository);
@@ -202,7 +205,7 @@ public class BoatServiceUnitTest {
     @Test
     void setImage() {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(createBoat(1L)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(new Boat(1L, "my boat", "my description", true));
         boatService.setImage("1");

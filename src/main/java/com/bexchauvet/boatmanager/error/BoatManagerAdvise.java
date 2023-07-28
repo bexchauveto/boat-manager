@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -21,12 +22,19 @@ import java.util.stream.Collectors;
 public class BoatManagerAdvise {
 
 
-    @ExceptionHandler(value = {BoatNotFoundException.class, BoatImageNotFoundException.class})
+    @ExceptionHandler(value = {BoatNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     protected ResponseEntity<ErrorDTO> handleNotFound(RuntimeException ex) {
         return new ResponseEntity<>(new ErrorDTO(ex.getMessage(), HttpStatus.NOT_FOUND, new ArrayList<>()),
                 HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {BoatImageNotFoundException.class})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    protected ResponseEntity<byte[]> handleNotFoundImage(RuntimeException ex) throws IOException {
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {BadLoginUnauthorizedException.class, UsernameNotFoundException.class})
@@ -41,7 +49,7 @@ public class BoatManagerAdvise {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     protected ResponseEntity<ErrorDTO> handleBadRequest(MethodArgumentNotValidException ex) {
-        return new ResponseEntity<>(new ErrorDTO(ex.getMessage(), HttpStatus.BAD_REQUEST, ex
+        return new ResponseEntity<>(new ErrorDTO("Input Value is not valid", HttpStatus.BAD_REQUEST, ex
                 .getBindingResult()
                 .getFieldErrors()
                 .stream()

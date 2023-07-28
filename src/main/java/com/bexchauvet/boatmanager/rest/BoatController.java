@@ -2,10 +2,10 @@ package com.bexchauvet.boatmanager.rest;
 
 import com.bexchauvet.boatmanager.domain.Boat;
 import com.bexchauvet.boatmanager.error.dto.ErrorDTO;
+import com.bexchauvet.boatmanager.rest.dto.BoatDTO;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
 import com.bexchauvet.boatmanager.service.BoatService;
 import com.bexchauvet.boatmanager.service.ImageService;
-import com.bexchauvet.boatmanager.service.dto.BoatDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -169,12 +169,13 @@ public class BoatController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorDTO.class))),
             @ApiResponse(responseCode = "404", description = "Boat not found or the boat has no image",
-                    content = @Content(mediaType = "application/json",
+                    content = @Content(mediaType = "image/png",
                             schema = @Schema(implementation = ErrorDTO.class)))})
-    @GetMapping(value = "/{id}/images", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE,
-            MediaType.APPLICATION_JSON_VALUE})
-    public @ResponseBody byte[] downloadImage(@PathVariable("id") String id) throws IOException {
-        return IOUtils.toByteArray(this.imageService.downloadImage(id));
+    @GetMapping(value = "/{id}/images", produces = {MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE})
+    public ResponseEntity<byte[]> downloadImage(@PathVariable("id") String id) throws IOException {
+        return new ResponseEntity<>(IOUtils.toByteArray(this.imageService.downloadImage(id)),
+                HttpStatusCode.valueOf(200));
+
     }
 
 

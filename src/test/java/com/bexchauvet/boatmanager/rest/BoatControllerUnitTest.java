@@ -2,10 +2,10 @@ package com.bexchauvet.boatmanager.rest;
 
 import com.bexchauvet.boatmanager.domain.Boat;
 import com.bexchauvet.boatmanager.error.exception.BoatNotFoundException;
+import com.bexchauvet.boatmanager.rest.dto.BoatDTO;
 import com.bexchauvet.boatmanager.rest.dto.MessageDTO;
 import com.bexchauvet.boatmanager.service.BoatService;
 import com.bexchauvet.boatmanager.service.ImageService;
-import com.bexchauvet.boatmanager.service.dto.BoatDTO;
 import org.apache.commons.compress.utils.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -237,8 +237,8 @@ public class BoatControllerUnitTest {
         byte[] data = new byte[]{1, 2, 3};
         when(imageService.downloadImage(Mockito.anyString()))
                 .thenReturn(new ByteArrayInputStream(data));
-        byte[] downloadImageResult = boatController.downloadImage("1");
-        assertArrayEquals(IOUtils.toByteArray(new ByteArrayInputStream(data)), downloadImageResult);
+        ResponseEntity<byte[]> downloadImageResult = boatController.downloadImage("1");
+        assertArrayEquals(IOUtils.toByteArray(new ByteArrayInputStream(data)), downloadImageResult.getBody());
         verify(imageService).downloadImage(Mockito.anyString());
         verifyNoMoreInteractions(imageService);
         verifyNoInteractions(boatService);

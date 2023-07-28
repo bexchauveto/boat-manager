@@ -7,7 +7,7 @@ spring:
         show-sql: false
     generate-ddl: true
   datasource:
-    url: jdbc:postgresql://localhost:56603/mydatabase
+    url: jdbc:postgresql://localhost:5432/boat-manager
     username: myuser
     password: secret
   servlet:
@@ -27,3 +27,52 @@ jwt:
 springdoc:
   swagger-ui:
     use-root-path: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        show-sql: false
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/boat-manager
+    username: myuser
+    password: secret
+user1:
+  name: ${USER_1_PASSWORD:Bob}
+  password: ${USER_1_PASSWORD:872Mu58o&F#7Qy398n*3}
+user2:
+  name: ${USER_1_PASSWORD:Alice}
+  password: ${USER_1_PASSWORD:%TF547o3b9%p5P^3c7m9}
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: none
+        show-sql: false
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/boat-manager
+    username: myuser
+    password: secret
+minio:
+  url: minio
+  port: 9000
+  access-key: Pyf8BN7bUgAPO11HhE5l
+  secret-key: dzh6cyWzlmVGJ2bcseKv5GEWQNp61CC36q6XdM88
+user1:
+  name: ${USER_1_NAME}
+  password: ${USER_1_PASSWORD}
+user2:
+  name: ${USER_2_NAME}
+  password: ${USER_2_PASSWORD}

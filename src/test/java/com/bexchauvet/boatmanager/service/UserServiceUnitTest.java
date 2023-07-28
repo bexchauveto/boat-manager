@@ -4,7 +4,7 @@ package com.bexchauvet.boatmanager.service;
 import com.bexchauvet.boatmanager.error.exception.BadLoginUnauthorizedException;
 import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
 import com.bexchauvet.boatmanager.service.Impl.UserServiceImpl;
-import com.bexchauvet.boatmanager.service.dto.UserDTO;
+import com.bexchauvet.boatmanager.rest.dto.UserDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
