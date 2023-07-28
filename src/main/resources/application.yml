@@ -49,6 +49,7 @@ user1:
 user2:
   name: ${USER_1_PASSWORD:Alice}
   password: ${USER_1_PASSWORD:%TF547o3b9%p5P^3c7m9}
+server-swagger: http://localhost:8586
 ---
 spring:
   config:
@@ -76,3 +77,4 @@ user1:
 user2:
   name: ${USER_2_NAME}
   password: ${USER_2_PASSWORD}
+server-swagger: https://boat-manager.bex-chauvet.fr/

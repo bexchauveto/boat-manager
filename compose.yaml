@@ -35,7 +35,7 @@ services:
       USER_2_NAME: $USER_2_NAME
       USER_2_PASSWORD: $USER_2_PASSWORD
     ports:
-      - '8080:8080'
+      - '8586:8080'
     profiles:
       - prod
     networks:

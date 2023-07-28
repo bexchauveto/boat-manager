@@ -5,7 +5,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-  
+
 jobs:
   push_to_registry:
     name: Push Docker image to Docker Hub
@@ -40,8 +40,8 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: | 
-            docker-compose --profile prod --env-file env.prod stop 
-            docker-compose --profile prod --env-file env.prod pull 
-            docker-compose --profile prod --env-file env.prod up --no-start app
-            docker-compose --profile prod --env-file env.prod start app
+          script: |
+            docker compose --profile prod --env-file env.prod stop 
+            docker compose --profile prod --env-file env.prod pull 
+            docker compose --profile prod --env-file env.prod up --no-start app
+            docker compose --profile prod --env-file env.prod start app
