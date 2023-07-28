@@ -27,6 +27,7 @@ jwt:
 springdoc:
   swagger-ui:
     use-root-path: true
+server-swagger: http://localhost:8080
 ---
 spring:
   config:
@@ -49,7 +50,7 @@ user1:
 user2:
   name: ${USER_1_PASSWORD:Alice}
   password: ${USER_1_PASSWORD:%TF547o3b9%p5P^3c7m9}
-server-swagger: http://localhost:8586
+server-swagger: http://localhost:8080
 ---
 spring:
   config:
