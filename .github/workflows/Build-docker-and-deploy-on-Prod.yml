@@ -29,7 +29,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: latest
+          tags: irobire/boat-manager:latest
       - name: Docker Push
         run: docker push irobire/boat-manager:latest
       - name: Restart the docker microservice
@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            docker compose --profile prod --env-file env.prod stop 
-            docker compose --profile prod --env-file env.prod pull 
+            docker compose --profile prod --env-file env.prod stop app
+            docker compose --profile prod --env-file env.prod pull app
             docker compose --profile prod --env-file env.prod up --no-start app
             docker compose --profile prod --env-file env.prod start app
