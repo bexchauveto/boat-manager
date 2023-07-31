@@ -90,7 +90,7 @@ public class SecurityConfig {
                 .username(user2Name)
                 .passwordEncoder(password -> encoder().encode(password))
                 .password(user2Password)
-                .roles("USER", "ADMIN")
+                .roles("ADMIN")
                 .build();
         return new InMemoryUserDetailsManager(alice, bob);
     }

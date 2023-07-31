@@ -16,6 +16,8 @@ public interface BoatService {
 
     Boat getById(String id);
 
+    Boat getByName(String name);
+
     MessageDTO create(BoatDTO boat);
 
     MessageDTO update(String id, BoatDTO boat);
@@ -27,4 +29,6 @@ public interface BoatService {
     Boolean hasImage(String id);
 
     void setImage(String id);
+
+    void updatePositions();
 }

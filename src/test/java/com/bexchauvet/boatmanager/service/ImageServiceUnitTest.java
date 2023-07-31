@@ -10,7 +10,11 @@ import io.minio.*;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
 import io.minio.messages.ErrorResponse;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,6 +25,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,12 +47,16 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the put image function with bucket not exists and exception")
     void putImage_BucketNotExists_Exception() throws Exception {
+        Instant now = Instant.now();
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        now, 0.0, 0.0)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(
-                        new Boat(1L, "my new boat name", "brand new description", false));
+                        new Boat(1L, "my new boat name", "brand new description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                                now, 0.0, 0.0));
         when(minioClient.bucketExists(Mockito.any(BucketExistsArgs.class)))
                 .thenThrow(new InsufficientDataException("message"));
         assertThrows(RuntimeException.class,
@@ -59,14 +68,23 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the put image function with bucket not exists and ErrorResponsException")
     void putImage_BucketNotExists_ErrorResponseException() throws Exception {
+        Instant now = Instant.now();
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        now, 0.0, 0.0)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(
-                        new Boat(1L, "my new boat name", "brand new description", false));
+                        new Boat(1L, "my new boat name", "brand new description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                                now, 0.0, 0.0));
         when(minioClient.bucketExists(Mockito.any(BucketExistsArgs.class)))
-                .thenThrow(new ErrorResponseException(new ErrorResponse(), null, "httpTrace"));
+                .thenThrow(new ErrorResponseException(new ErrorResponse(),
+                        new Response.Builder().code(400).protocol(Protocol.HTTP_1_0)
+                                .request(new Request.Builder().url("https://url").build())
+                                .message("error")
+                                .build(),
+                        "httpTrace"));
         assertThrows(BoatImageNotFoundException.class,
                 () -> imageService.putImage("id", new MockMultipartFile("file.png", "data".getBytes())));
         verify(minioClient).bucketExists(Mockito.any(BucketExistsArgs.class));
@@ -76,12 +94,16 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the put image function with bucket not exists, create bucket and insert")
     void putImage_BucketNotExists_CreateBucket_thenInsert() throws Exception {
+        Instant now = Instant.now();
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        now, 0.0, 0.0)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(
-                        new Boat(1L, "my new boat name", "brand new description", false));
+                        new Boat(1L, "my new boat name", "brand new description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                                now, 0.0, 0.0));
         when(minioClient.bucketExists(Mockito.any(BucketExistsArgs.class)))
                 .thenReturn(false);
         doNothing().when(minioClient).makeBucket(Mockito.any(MakeBucketArgs.class));
@@ -104,7 +126,9 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the put image function with bad id")
     void putImage_NOT_FOUND() throws Exception {
+        Instant now = Instant.now();
         when(boatRepository.findById(Mockito.anyString()))
                 .thenReturn(Optional.empty());
         assertThrows(BoatNotFoundException.class,
@@ -115,12 +139,16 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the put image function with bucket exists and insert")
     void putImage_BucketExists_thenInsert() throws Exception {
+        Instant now = Instant.now();
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        now, 0.0, 0.0)));
         when(boatRepository.save(Mockito.any(Boat.class)))
                 .thenReturn(
-                        new Boat(1L, "my new boat name", "brand new description", false));
+                        new Boat(1L, "my new boat name", "brand new description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                                now, 0.0, 0.0));
         when(minioClient.bucketExists(Mockito.any(BucketExistsArgs.class)))
                 .thenReturn(true);
         when(minioClient.putObject(Mockito.any(PutObjectArgs.class)))
@@ -141,9 +169,11 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the download image function with bucket not exists and exception")
     void downloadImage_BucketNotExists_Exception() throws Exception {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        Instant.now(), 0.0, 0.0)));
         when(minioClient.getObject(Mockito.any(GetObjectArgs.class)))
                 .thenThrow(new InsufficientDataException("message"));
         assertThrows(RuntimeException.class,
@@ -154,9 +184,11 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the download image function with bucket not exists and ErrorResponsException")
     void downloadImage_BucketNotExists_ErrorResponseException() throws Exception {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        Instant.now(), 0.0, 0.0)));
         when(minioClient.getObject(Mockito.any(GetObjectArgs.class)))
                 .thenThrow(new ErrorResponseException(new ErrorResponse(), null, "httpTrace"));
         assertThrows(BoatImageNotFoundException.class,
@@ -168,9 +200,11 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the download image function")
     void downloadImage() throws Exception {
         when(boatRepository.findById(Mockito.anyString()))
-                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false)));
+                .thenReturn(Optional.of(new Boat(1L, "my boat", "my description", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        Instant.now(), 0.0, 0.0)));
         byte[] data = new byte[]{1, 2, 3};
         when(minioClient.getObject(Mockito.any(GetObjectArgs.class)))
                 .thenReturn(new GetObjectResponse(null, "bucket", "region", "object",
@@ -183,6 +217,7 @@ public class ImageServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the download image function with bad id")
     void downloadImage_NOT_FOUND() throws Exception {
         when(boatRepository.findById(Mockito.anyString()))
                 .thenReturn(Optional.empty());
@@ -194,7 +229,8 @@ public class ImageServiceUnitTest {
     }
 
     @Test
-    void removeImage_BucketNotExists_Exception() throws Exception {
+    @DisplayName("Test the remove image function and exception")
+    void removeImage_Exception() throws Exception {
         doThrow(new InsufficientDataException("message"))
                 .when(minioClient).removeObject(Mockito.any(RemoveObjectArgs.class));
         assertThrows(RuntimeException.class,
@@ -204,7 +240,8 @@ public class ImageServiceUnitTest {
     }
 
     @Test
-    void removeImage_BucketNotExists_ErrorResponseException() throws Exception {
+    @DisplayName("Test the remove image function and ErrorResponseException")
+    void removeImage_ErrorResponseException() throws Exception {
         doThrow(new ErrorResponseException(new ErrorResponse(), null, "httpTrace"))
                 .when(minioClient).removeObject(Mockito.any(RemoveObjectArgs.class));
         assertThrows(RuntimeException.class,
@@ -214,7 +251,8 @@ public class ImageServiceUnitTest {
     }
 
     @Test
-    void removeImage_BucketNotExists_CreateBucket_thenInsert() throws Exception {
+    @DisplayName("Test the remove image function")
+    void removeImage() throws Exception {
         doNothing().when(minioClient).removeObject(Mockito.any(RemoveObjectArgs.class));
         Boolean removeImageResult = imageService.removeImage("1");
         Boolean expectedResult = true;

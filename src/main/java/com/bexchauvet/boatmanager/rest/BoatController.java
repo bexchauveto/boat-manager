@@ -16,10 +16,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.IOUtils;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import java.util.List;
 @RequestMapping("/boats")
 @Tag(name = "Boat", description = "The Boat API.")
 @AllArgsConstructor
+@Slf4j
 public class BoatController {
 
     private BoatService boatService;
@@ -84,6 +87,22 @@ public class BoatController {
     @GetMapping("/{id}")
     public Boat getId(@PathVariable("id") String id) {
         return this.boatService.getById(id);
+    }
+
+    @Operation(summary = "Get a boat by Name")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Found the boat corresponding",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Boat.class))}),
+            @ApiResponse(responseCode = "401", description = "Invalid authentication token",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Boat not found",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class)))})
+    @GetMapping("/{name}")
+    public Boat getName(@PathVariable("name") String name) {
+        return this.boatService.getByName(name);
     }
 
     @Operation(summary = "Create a new boat in the database")
@@ -176,6 +195,21 @@ public class BoatController {
         return new ResponseEntity<>(IOUtils.toByteArray(this.imageService.downloadImage(id)),
                 HttpStatusCode.valueOf(200));
 
+    }
+
+    @Operation(summary = "Update the position of all the boats in the database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "The update is launched",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = MessageDTO.class))}),
+            @ApiResponse(responseCode = "401", description = "Invalid authentication token",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorDTO.class)))})
+    @PostMapping(value = "/update-position")
+    public ResponseEntity<MessageDTO> updatePositions() {
+        this.boatService.updatePositions();
+        return new ResponseEntity<>(new MessageDTO("Updating", HttpStatus.OK, null),
+                HttpStatusCode.valueOf(200));
     }
 
 

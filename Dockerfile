@@ -10,7 +10,7 @@ COPY --from=cache /cache /home/gradle/.gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src/ src/
-RUN gradle --no-daemon build --stacktrace
+RUN gradle --no-daemon build --stacktrace --scan
 
 FROM openjdk:17-alpine
 WORKDIR /app

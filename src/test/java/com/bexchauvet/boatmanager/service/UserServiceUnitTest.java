@@ -3,9 +3,10 @@ package com.bexchauvet.boatmanager.service;
 
 import com.bexchauvet.boatmanager.error.exception.BadLoginUnauthorizedException;
 import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
-import com.bexchauvet.boatmanager.service.Impl.UserServiceImpl;
 import com.bexchauvet.boatmanager.rest.dto.UserDTO;
+import com.bexchauvet.boatmanager.service.Impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -45,6 +46,7 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the generate token function with bad login")
     void generateToken_whenBadLoginPassword() {
         when(userDetailsService.loadUserByUsername(Mockito.anyString()))
                 .thenThrow(new UsernameNotFoundException("UserName"));
@@ -56,6 +58,7 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the generate token function with bad password")
     void generateToken_whenGoodLogin_BadPassword() {
         when(userDetailsService.loadUserByUsername(Mockito.anyString()))
                 .thenReturn(User.builder().username("Username").password("password").roles("USER").build());
@@ -70,6 +73,7 @@ public class UserServiceUnitTest {
     }
 
     @Test
+    @DisplayName("Test the generate token function with good login/password")
     void generateToken_whenGoodLogin_GoodPassword() {
         when(userDetailsService.loadUserByUsername(Mockito.anyString()))
                 .thenReturn(User.builder().username("Username").password("password").roles("USER").build());

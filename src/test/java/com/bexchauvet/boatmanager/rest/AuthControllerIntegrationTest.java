@@ -1,6 +1,7 @@
 package com.bexchauvet.boatmanager.rest;
 
 import com.bexchauvet.boatmanager.BoatManagerApplication;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class AuthControllerIntegrationTest {
 
 
     @Test
+    @DisplayName("Test to check authentication with bad credentials")
     void login_badCredentials() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON).content("{\"username\": \"jane\", " +
@@ -34,6 +36,7 @@ public class AuthControllerIntegrationTest {
     }
 
     @Test
+    @DisplayName("Test to check authentication with good credentials")
     void login_GoodCredentials() throws Exception {
         mvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON).content("{\"username\": \"Bob\", " +

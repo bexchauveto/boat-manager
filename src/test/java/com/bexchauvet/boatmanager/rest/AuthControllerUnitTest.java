@@ -5,6 +5,7 @@ import com.bexchauvet.boatmanager.rest.dto.TokenDTO;
 import com.bexchauvet.boatmanager.rest.dto.UserDTO;
 import com.bexchauvet.boatmanager.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -33,6 +34,7 @@ public class AuthControllerUnitTest {
 
 
     @Test
+    @DisplayName("Test to check authentication with bad credentials")
     void login_BadCredentials() {
         when(userService.generateToken(Mockito.any(UserDTO.class)))
                 .thenThrow(new UsernameNotFoundException("username"));
@@ -43,6 +45,7 @@ public class AuthControllerUnitTest {
     }
 
     @Test
+    @DisplayName("Test to check authentication with bad credentials")
     void login_BadPasswords() {
         when(userService.generateToken(Mockito.any(UserDTO.class)))
                 .thenThrow(new BadLoginUnauthorizedException());
@@ -53,6 +56,7 @@ public class AuthControllerUnitTest {
     }
 
     @Test
+    @DisplayName("Test to check authentication with good credentials")
     void login_GoodCredentials() {
         when(userService.generateToken(Mockito.any(UserDTO.class)))
                 .thenReturn(new TokenDTO("TOKEN"));

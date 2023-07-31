@@ -4,6 +4,7 @@ import com.bexchauvet.boatmanager.BoatManagerApplication;
 import com.bexchauvet.boatmanager.domain.Boat;
 import com.bexchauvet.boatmanager.repository.BoatRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,11 +33,16 @@ public class BoatControllerIntegrationTest {
 
     @BeforeEach
     void init(@Autowired BoatRepository boatRepository) {
-        boatRepository.saveAll(List.of(new Boat(1L, "QUEEN MARY 2", "Passenger Ship", false),
-                new Boat(2L, "QUEEN ELIZABETH", "Combat Vessel", false)));
+        boatRepository.saveAll(List.of(new Boat(1L, "QUEEN MARY 2", "Passenger Ship", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        Instant.now(), 0.0, 0.0),
+                new Boat(2L, "QUEEN ELIZABETH", "Combat Vessel", false, null, "declaredName", "shipType", "flag", 0, 0, 0, 0, 0,
+                        Instant.now(), 0.0, 0.0)));
     }
 
+
+    //@WithMockUser(username = "JOHN", authorities = { "SYS_ADMIN" })
     @Test
+    @DisplayName("Test to check if endpoints are protected when there is no token in request")
     void No_Token() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/boats")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -61,6 +68,9 @@ public class BoatControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
         mvc.perform(MockMvcRequestBuilders.get("/boats/1/image")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
+        mvc.perform(MockMvcRequestBuilders.get("/boats/update-position")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
 
